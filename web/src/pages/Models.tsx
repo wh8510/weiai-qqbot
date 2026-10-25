@@ -207,7 +207,7 @@ export default function Models() {
               </div>
               <div className="chips">
                 <Badge tone={provider.enabled ? 'mint' : 'neutral'}>{provider.enabled ? '启用' : '停用'}</Badge>
-                <Badge tone={provider.hasKey ? 'blue' : 'amber'}>{provider.hasKey ? '已配 Key' : '缺 Key'}</Badge>
+                <Badge tone={provider.hasKey ? 'blue' : 'amber'}>{provider.hasKey ? `已配 Key${provider.keyLast4 ? ` · ${provider.keyLast4}` : ''}` : '缺 Key'}</Badge>
               </div>
             </div>
             <div className="provider-meta">

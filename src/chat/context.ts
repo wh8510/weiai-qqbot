@@ -141,6 +141,10 @@ export function buildContext(input: BuildContextInput): BuiltContext {
       currentParts.push({ type: 'image', mimeType: img.mimeType, dataBase64: img.dataBase64 });
     }
   }
+  // DeepSeek (and some other JSON-mode models) occasionally returns only
+  // whitespace when a long history ends on an assistant turn. A final short
+  // instruction in the current user message reliably anchors the JSON plan.
+  currentParts.push({ type: 'text', text: '（只输出 JSON 回复计划，不要输出空白或解释。）' });
 
   const messages: ChatMessage[] = [{ role: 'system', content: system }, ...history, { role: 'user', content: currentParts }];
   const usedTokens = estimateMessagesTokens(messages);

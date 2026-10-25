@@ -53,6 +53,15 @@ function clampNumber(value: unknown, min: number, max: number, fallback: number)
   return Math.max(min, Math.min(max, n));
 }
 
+function normalizeApiKey(value: unknown): string {
+  // API keys never contain whitespace. Copy/paste often brings a trailing
+  // label or a line break; keeping only the first token prevents a valid key
+  // from being silently corrupted in the database.
+  const raw = String(value ?? '').trim();
+  if (!raw) return '';
+  return raw.split(/\s+/)[0] ?? '';
+}
+
 export async function createWebServer(deps: WebDeps): Promise<any> {
   const { store, gateway, runtime, proactive, events } = deps;
   const app = Fastify({
@@ -236,11 +245,17 @@ export async function createWebServer(deps: WebDeps): Promise<any> {
   });
 
   app.get('/api/providers', async () => ({
-    providers: catalogSummary(store).map((p) => ({
-      ...p,
-      api_key_enc: undefined,
-      extra_headers_json: undefined,
-    })),
+    providers: catalogSummary(store).map((p) => {
+      const key = store.getProviderApiKey(p.id);
+      return {
+        ...p,
+        api_key_enc: undefined,
+        extra_headers_json: undefined,
+        hasKey: Boolean(key),
+        keyLast4: key ? key.slice(-4) : null,
+        keyLength: key ? key.length : 0,
+      };
+    }),
   }));
 
   app.post('/api/providers', async (req, reply) => {
@@ -256,7 +271,7 @@ export async function createWebServer(deps: WebDeps): Promise<any> {
       name: String(body.name ?? id),
       kind,
       baseUrl,
-      apiKey: body.apiKey ? String(body.apiKey) : undefined,
+      apiKey: body.apiKey ? normalizeApiKey(body.apiKey) : undefined,
     });
     store.audit((req as any).auth.username, 'provider.create', id, req.ip);
     return { ok: true, id };
@@ -268,8 +283,9 @@ export async function createWebServer(deps: WebDeps): Promise<any> {
     if (!provider) return reply.code(404).send({ error: 'NOT_FOUND', message: 'Provider 不存在' });
     const body = jsonBody(req);
     if (body.apiKey !== undefined) {
-      store.setProviderKey(id, String(body.apiKey));
-      if (String(body.apiKey)) store.setProviderEnabled(id, true);
+      const key = normalizeApiKey(body.apiKey);
+      store.setProviderKey(id, key);
+      if (key) store.setProviderEnabled(id, true);
     }
     if (body.baseUrl !== undefined && String(body.baseUrl).trim()) store.setProviderBaseUrl(id, String(body.baseUrl).trim());
     if (body.enabled !== undefined) store.setProviderEnabled(id, Boolean(body.enabled));

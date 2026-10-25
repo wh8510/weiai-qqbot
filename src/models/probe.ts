@@ -115,7 +115,7 @@ export async function probeModel(input: {
             ],
           },
         ],
-        { purpose: 'probe-vision', maxTokens: 16, timeoutMs: 60_000 },
+        { purpose: 'probe-vision', maxTokens: 256, timeoutMs: 60_000 },
       );
       result.vision = saysA7(vision.text);
       if (!result.vision) errors.push(`视觉探测返回: ${vision.text.slice(0, 80)}`);

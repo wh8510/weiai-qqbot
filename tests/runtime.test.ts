@@ -67,6 +67,7 @@ describe('context builder capability paths', () => {
     const last = built.messages[built.messages.length - 1];
     expect(Array.isArray(last.content)).toBe(true);
     expect((last.content as any[]).some((p) => p.type === 'image')).toBe(false);
+    expect((last.content as any[]).some((p) => p.type === 'text' && String(p.text).includes('只输出 JSON'))).toBe(true);
   });
 
   it('passes images directly when the model supports vision', () => {

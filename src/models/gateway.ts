@@ -292,7 +292,18 @@ export async function callRole(
         timeoutMs: options.timeoutMs,
         estimatedPromptTokens: estimatedPrompt,
       });
-      if (!response.text.trim()) throw new ProviderError('模型返回空内容', 0, '', true);
+      if (!response.text.trim()) {
+        const choice = response.raw?.choices?.[0];
+        const finish = choice?.finish_reason ?? 'unknown';
+        const contentType = typeof choice?.message?.content;
+        const reasoningLength = String(choice?.message?.reasoning_content ?? '').length;
+        throw new ProviderError(
+          `模型返回空内容（finish=${finish}, contentType=${contentType}, reasoningChars=${reasoningLength}）`,
+          0,
+          JSON.stringify({ finish, contentType, reasoningLength }),
+          true,
+        );
+      }
 
       const actual = estimateCost({
         store,

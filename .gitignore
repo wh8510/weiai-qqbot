@@ -1,7 +1,7 @@
 node_modules/
 dist/
 data/
-data-demo*/
+data-*/
 .env
 config.yaml
 *.log

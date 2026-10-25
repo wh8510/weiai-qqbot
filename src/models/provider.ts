@@ -21,6 +21,7 @@ export interface ChatRequest {
   purpose?: string;
   timeoutMs?: number;
   estimatedPromptTokens?: number;
+  thinking?: 'enabled' | 'disabled';
 }
 
 export interface ChatUsage {
@@ -167,6 +168,12 @@ async function openAiChat(req: ChatRequest): Promise<ChatResponse> {
   if (req.maxTokens) {
     if (isGpt6) body.max_completion_tokens = req.maxTokens;
     else body.max_tokens = req.maxTokens;
+  }
+  // DeepSeek V4.x defaults to thinking mode, which can consume the entire
+  // small max_tokens budget in reasoning_content and leave content empty.
+  // Short chat/probe calls use non-thinking mode unless explicitly requested.
+  if (req.model.model_id.startsWith('deepseek-') && req.thinking !== 'enabled') {
+    body.thinking = { type: 'disabled' };
   }
   if (req.json && hasJson) body.response_format = { type: 'json_object' };
   if (req.purpose === 'probe') body.temperature = 0;
