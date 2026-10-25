@@ -1,0 +1,58 @@
+{
+  "name": "onebot-companion",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "A self-hosted, capability-aware AI companion for OneBot 11 (NapCat / Lagrange / LLOneBot).",
+  "license": "MIT",
+  "packageManager": "pnpm@9.11.0",
+  "engines": {
+    "node": ">=22.13"
+  },
+  "scripts": {
+    "dev:server": "tsx watch src/index.ts",
+    "dev:web": "vite",
+    "build": "pnpm build:server && pnpm build:web",
+    "build:server": "tsup",
+    "build:web": "vite build",
+    "start": "node dist/server/index.js",
+    "cli": "node dist/server/cli.js",
+    "demo": "cross-env DEMO_MODE=1 BOT_PORT=18080 BOT_DATA_DIR=data-demo tsx src/index.ts",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@fastify/cookie": "^11.0.2",
+    "@fastify/helmet": "^13.0.1",
+    "@fastify/multipart": "^9.0.3",
+    "@fastify/static": "^8.2.0",
+    "@node-rs/argon2": "^2.2.2",
+    "better-sqlite3": "^12.4.1",
+    "dotenv": "^17.2.3",
+    "fastify": "^5.12.7",
+    "pino": "^9.14.0",
+    "pino-pretty": "^13.1.2",
+    "silk-wasm": "^3.7.1",
+    "ws": "^8.18.3",
+    "yaml": "^2.8.1",
+    "zod": "^4.1.12"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/node": "^24.10.1",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.2",
+    "@types/ws": "^8.18.1",
+    "@vitejs/plugin-react": "^5.1.1",
+    "cross-env": "^10.1.0",
+    "playwright-core": "^1.64.1",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "tsup": "^8.5.1",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3",
+    "vite": "^8.3.5",
+    "vitest": "^4.0.8"
+  }
+}

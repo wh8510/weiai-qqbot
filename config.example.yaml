@@ -1,0 +1,45 @@
+# OneBot Companion — boot configuration
+#
+# 复制为 config.yaml 后修改。这里只放“启动前必须知道”的东西；
+# 人格、名单、预算、模型绑定等运行时设置都在 Web 管理端里改。
+#
+# 密钥优先级：环境变量 > config.yaml > data/master.key 自动生成。
+# 不要把真实 API Key 写进这个文件；API Key 请通过管理端填写。
+
+dataDir: data
+demo: false
+timezone: Asia/Shanghai
+currency: CNY
+logLevel: info
+
+server:
+  host: 127.0.0.1
+  port: 8080
+  # 生产环境填 https://bot.example.com；用于生成正确的 Cookie / 提示
+  publicUrl: ""
+  # 放在 Caddy/Nginx 后面时设为 true
+  trustProxy: false
+
+security:
+  masterKeyFile: master.key
+  sessionTtlHours: 72
+  adminUsername: admin
+  # 首次启动可指定初始密码；不填会自动生成并写入 data/initial-credentials.txt
+  initialAdminPassword: ""
+  forceHttps: false
+
+onebot:
+  # reverse：NapCat 作为客户端连过来（推荐）
+  # forward：程序作为客户端连 NapCat 的 WS 服务端
+  mode: reverse
+  path: /onebot/v11/ws
+  # 与 NapCat 的 access token 保持一致；也可以用环境变量 ONEBOT_TOKEN
+  token: ""
+  # forward 模式使用
+  url: ""
+  # 可选 HTTP API 兜底
+  httpUrl: ""
+  accountId: ""
+
+catalogFile: catalog/providers.yaml
+webDist: dist/web

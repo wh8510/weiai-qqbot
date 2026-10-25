@@ -1,0 +1,12 @@
+node_modules
+dist
+data
+data-demo*
+artifacts
+.git
+.github
+.env
+config.yaml
+*.log
+tests
+scripts/ui-smoke.mjs

@@ -1,0 +1,11 @@
+# Replace bot.example.com with your domain, then run:
+#   caddy run --config deploy/Caddyfile
+# or use the commented caddy service in docker-compose.yml.
+#
+# Caddy handles HTTPS and WebSocket upgrades automatically.
+# Keep the bot bound to 127.0.0.1:8080.
+
+bot.example.com {
+	encode zstd gzip
+	reverse_proxy 127.0.0.1:8080
+}

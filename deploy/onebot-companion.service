@@ -1,0 +1,24 @@
+[Unit]
+Description=OneBot Companion
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=onebot
+WorkingDirectory=/opt/onebot-companion
+EnvironmentFile=/opt/onebot-companion/.env
+ExecStart=/usr/bin/node /opt/onebot-companion/dist/server/index.js
+Restart=always
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ReadWritePaths=/opt/onebot-companion/data
+ProtectHome=true
+# The app binds to 127.0.0.1 by default; put Caddy/Nginx in front.
+AmbientCapabilities=
+CapabilityBoundingSet=
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,37 @@
+services:
+  bot:
+    build: .
+    env_file:
+      - .env
+    environment:
+      BOT_DATA_DIR: /data
+      BOT_HOST: 0.0.0.0
+      BOT_PORT: 8080
+    ports:
+      # Keep the admin panel on localhost. Put Caddy / Nginx with HTTPS in front.
+      - "127.0.0.1:8080:8080"
+    volumes:
+      - ./data:/data
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+
+  # Optional TLS reverse proxy. Uncomment after putting your domain in
+  # deploy/Caddyfile and pointing DNS at this host.
+  #
+  # caddy:
+  #   image: caddy:2
+  #   depends_on:
+  #     - bot
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #   volumes:
+  #     - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+  #     - caddy_data:/data
+  #     - caddy_config:/config
+  #   restart: unless-stopped
+  #
+  # volumes:
+  #   caddy_data:
+  #   caddy_config:
