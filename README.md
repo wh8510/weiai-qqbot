@@ -122,6 +122,15 @@ node dist/server/cli.js reset-password
 
 详见 [docs/MODEL_CAPABILITIES.md](docs/MODEL_CAPABILITIES.md)。
 
+其他文档：
+
+- [架构](docs/ARCHITECTURE.md)
+- [部署](docs/DEPLOYMENT.md)
+- [安全与威胁模型](docs/SECURITY.md)
+- [人格编写](docs/PERSONA.md)
+- [FAQ](docs/FAQ.md)
+- [交付验证记录](docs/VERIFICATION.md)
+
 ---
 
 ## 目录结构
