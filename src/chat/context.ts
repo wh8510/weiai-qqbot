@@ -40,6 +40,7 @@ export interface BuiltContext {
   messages: ChatMessage[];
   system: string;
   usedTokens: number;
+  budgetTokens: number;
   imagePath: 'direct' | 'vision-fallback' | 'no-vision' | 'none';
   summary: string;
   facts: any[];
@@ -148,6 +149,7 @@ export function buildContext(input: BuildContextInput): BuiltContext {
     messages,
     system,
     usedTokens,
+    budgetTokens: maxPromptTokens,
     imagePath,
     summary,
     facts,

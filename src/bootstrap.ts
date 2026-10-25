@@ -68,7 +68,7 @@ function seedSettings(store: Store): void {
     'proactive.group_daily_cap': '2',
     'defaults.private_reply_probability': '0.95',
     'defaults.group_reply_probability': '0.12',
-    'defaults.group_attention_threshold': '4',
+    'defaults.group_attention_threshold': '3',
     'defaults.sticker_probability': '0.2',
     'defaults.voice_probability': '0.1',
     'defaults.max_messages_per_hour': '12',

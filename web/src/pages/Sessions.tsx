@@ -73,7 +73,7 @@ export default function Sessions() {
           paused: Boolean(settings.paused),
           privateReplyProbability: Number(settings.privateReplyProbability ?? 0.95),
           groupReplyProbability: Number(settings.groupReplyProbability ?? 0.12),
-          groupAttentionThreshold: Number(settings.groupAttentionThreshold ?? 4),
+          groupAttentionThreshold: Number(settings.groupAttentionThreshold ?? 3),
           proactiveDailyCap: Number(settings.proactiveDailyCap ?? 2),
           proactiveMinIntervalMin: Number(settings.proactiveMinIntervalMin ?? 120),
           quietStart: settings.quietStart ?? '23:30',
@@ -207,7 +207,7 @@ export default function Sessions() {
                     <Field label="群聊插话概率" hint="仅在注意力过线后生效">
                       <TextInput type="number" step="0.01" min="0" max="1" value={settings.groupReplyProbability ?? 0.12} onChange={(e) => setSettings({ ...settings, groupReplyProbability: Number(e.target.value) })} />
                     </Field>
-                    <Field label="注意力阈值"><TextInput type="number" value={settings.groupAttentionThreshold ?? 4} onChange={(e) => setSettings({ ...settings, groupAttentionThreshold: Number(e.target.value) })} /></Field>
+                    <Field label="注意力阈值"><TextInput type="number" value={settings.groupAttentionThreshold ?? 3} onChange={(e) => setSettings({ ...settings, groupAttentionThreshold: Number(e.target.value) })} /></Field>
                     <Field label="主动消息上限/天"><TextInput type="number" value={settings.proactiveDailyCap ?? 2} onChange={(e) => setSettings({ ...settings, proactiveDailyCap: Number(e.target.value) })} /></Field>
                     <Field label="主动最短间隔（分钟）"><TextInput type="number" value={settings.proactiveMinIntervalMin ?? 120} onChange={(e) => setSettings({ ...settings, proactiveMinIntervalMin: Number(e.target.value) })} /></Field>
                     <Field label="静默开始 / 结束">

@@ -71,7 +71,7 @@ export class ChatRuntime {
       paused: override.paused === true,
       privateReplyProbability: Number(override.privateReplyProbability ?? this.store.getSetting('defaults.private_reply_probability', '0.95')),
       groupReplyProbability: Number(override.groupReplyProbability ?? this.store.getSetting('defaults.group_reply_probability', '0.12')),
-      groupAttentionThreshold: Number(override.groupAttentionThreshold ?? this.store.getSetting('defaults.group_attention_threshold', '4')),
+      groupAttentionThreshold: Number(override.groupAttentionThreshold ?? this.store.getSetting('defaults.group_attention_threshold', '3')),
       stickerProbability: Number(override.stickerProbability ?? this.store.getSetting('defaults.sticker_probability', '0.2')),
       voiceProbability: Number(override.voiceProbability ?? this.store.getSetting('defaults.voice_probability', '0.1')),
       maxMessagesPerHour: Number(override.maxMessagesPerHour ?? this.store.getSetting('defaults.max_messages_per_hour', '12')),
@@ -138,7 +138,7 @@ export class ChatRuntime {
       text: text || '[图片]',
       tokens: 0,
     });
-    this.store.updateRelationship(session.id, { last_interaction_at: Date.now() } as any);
+    this.store.updateRelationship(session.id, { lastInteractionAt: Date.now() });
 
     // In mention-only groups we still store context (encrypted), so when the
     // bot is eventually @-ed it knows what the group was talking about. We do
@@ -216,7 +216,8 @@ export class ChatRuntime {
         text: combinedText,
         settings,
         botSpokeRecently,
-        messagesLastHour: this.store.countOutgoingSince(session.id, Date.now() - 3600_000),
+        messagesLastHour: this.store.countIncomingSince(session.id, Date.now() - 3600_000),
+        botMessagesLastHour: this.store.countOutgoingSince(session.id, Date.now() - 3600_000),
         quiet,
       });
       if (!decision.speak) {
@@ -371,6 +372,12 @@ export class ChatRuntime {
       voiceAvailable: voiceStatus().supported,
       stickersAvailable: this.store.listStickers().length > 0,
     });
+
+    if (context.usedTokens > context.budgetTokens * 0.85) {
+      // Near the prompt budget: schedule a flush/compaction after this reply.
+      // The next turn uses the new summary + facts instead of a huge history.
+      this.store.enqueueJob('memory.summarize', { sessionId: session.id }, Date.now() + 1500);
+    }
 
     const result = await callRole(
       this.store,

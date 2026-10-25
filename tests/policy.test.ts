@@ -59,24 +59,40 @@ describe('access policy', () => {
 describe('group attention', () => {
   it('always replies when mentioned', () => {
     const result = groupShouldSpeak({
-      mode: 'mention_only', mentioned: true, replyToBot: false, text: '', settings: {}, botSpokeRecently: false, messagesLastHour: 0, quiet: false,
+      mode: 'mention_only', mentioned: true, replyToBot: false, text: '', settings: {}, botSpokeRecently: false, messagesLastHour: 0, botMessagesLastHour: 0, quiet: false,
     });
     expect(result.speak).toBe(true);
   });
 
   it('stays silent in mention_only when not mentioned', () => {
     const result = groupShouldSpeak({
-      mode: 'mention_only', mentioned: false, replyToBot: false, text: '今天好热', settings: {}, botSpokeRecently: false, messagesLastHour: 0, quiet: false,
+      mode: 'mention_only', mentioned: false, replyToBot: false, text: '今天好热', settings: {}, botSpokeRecently: false, messagesLastHour: 0, botMessagesLastHour: 0, quiet: false,
     });
     expect(result.speak).toBe(false);
   });
 
+  it('can interject in smart mode when the score clears the threshold', () => {
+    const result = groupShouldSpeak({
+      mode: 'smart',
+      mentioned: false,
+      replyToBot: false,
+      text: '有人知道这个怎么弄吗？',
+      settings: { groupAttentionThreshold: 3, groupReplyProbability: 1 },
+      botSpokeRecently: false,
+      messagesLastHour: 2,
+      botMessagesLastHour: 0,
+      quiet: false,
+    });
+    expect(result.score).toBeGreaterThanOrEqual(3);
+    expect(result.speak).toBe(true);
+  });
+
   it('honours quiet hours and cooldown', () => {
     expect(groupShouldSpeak({
-      mode: 'smart', mentioned: false, replyToBot: false, text: '有人吗？', settings: {}, botSpokeRecently: false, messagesLastHour: 0, quiet: true,
+      mode: 'smart', mentioned: false, replyToBot: false, text: '有人吗？', settings: {}, botSpokeRecently: false, messagesLastHour: 0, botMessagesLastHour: 0, quiet: true,
     }).speak).toBe(false);
     expect(groupShouldSpeak({
-      mode: 'smart', mentioned: false, replyToBot: false, text: '有人吗？', settings: {}, botSpokeRecently: true, messagesLastHour: 0, quiet: false,
+      mode: 'smart', mentioned: false, replyToBot: false, text: '有人吗？', settings: {}, botSpokeRecently: true, messagesLastHour: 0, botMessagesLastHour: 0, quiet: false,
     }).speak).toBe(false);
   });
 });

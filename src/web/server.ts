@@ -633,7 +633,7 @@ export async function createWebServer(deps: WebDeps): Promise<any> {
     defaults: {
       privateReplyProbability: Number(store.getSetting('defaults.private_reply_probability', '0.95')),
       groupReplyProbability: Number(store.getSetting('defaults.group_reply_probability', '0.12')),
-      groupAttentionThreshold: Number(store.getSetting('defaults.group_attention_threshold', '4')),
+      groupAttentionThreshold: Number(store.getSetting('defaults.group_attention_threshold', '3')),
       stickerProbability: Number(store.getSetting('defaults.sticker_probability', '0.2')),
       voiceProbability: Number(store.getSetting('defaults.voice_probability', '0.1')),
       maxMessagesPerHour: Number(store.getSetting('defaults.max_messages_per_hour', '12')),
@@ -676,7 +676,7 @@ export async function createWebServer(deps: WebDeps): Promise<any> {
       const d = body.defaults;
       if (d.privateReplyProbability !== undefined) store.setSetting('defaults.private_reply_probability', String(clampNumber(d.privateReplyProbability, 0, 1, 0.95)));
       if (d.groupReplyProbability !== undefined) store.setSetting('defaults.group_reply_probability', String(clampNumber(d.groupReplyProbability, 0, 1, 0.12)));
-      if (d.groupAttentionThreshold !== undefined) store.setSetting('defaults.group_attention_threshold', String(clampNumber(d.groupAttentionThreshold, 0, 100, 4)));
+      if (d.groupAttentionThreshold !== undefined) store.setSetting('defaults.group_attention_threshold', String(clampNumber(d.groupAttentionThreshold, 0, 100, 3)));
       if (d.stickerProbability !== undefined) store.setSetting('defaults.sticker_probability', String(clampNumber(d.stickerProbability, 0, 1, 0.2)));
       if (d.voiceProbability !== undefined) store.setSetting('defaults.voice_probability', String(clampNumber(d.voiceProbability, 0, 1, 0.1)));
       if (d.maxMessagesPerHour !== undefined) store.setSetting('defaults.max_messages_per_hour', String(clampNumber(d.maxMessagesPerHour, 1, 500, 12)));

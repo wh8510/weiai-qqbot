@@ -72,14 +72,15 @@ export function groupShouldSpeak(input: {
   settings: Record<string, any>;
   botSpokeRecently: boolean;
   messagesLastHour: number;
+  botMessagesLastHour: number;
   quiet: boolean;
 }): { speak: boolean; score: number; reason: string } {
   if (input.mode === 'off') return { speak: false, score: 0, reason: '群已关闭' };
   if (input.mentioned || input.replyToBot) return { speak: true, score: 99, reason: '被点名/回复' };
   if (input.mode === 'mention_only') return { speak: false, score: 0, reason: '仅 @ 时回复' };
   if (input.quiet) return { speak: false, score: 0, reason: '静默时段' };
-  if (input.messagesLastHour >= Number(input.settings.maxMessagesPerHour ?? 12)) {
-    return { speak: false, score: 0, reason: '本群每小时消息上限' };
+  if (input.botMessagesLastHour >= Number(input.settings.maxMessagesPerHour ?? 12)) {
+    return { speak: false, score: 0, reason: '本群每小时机器人消息上限' };
   }
   if (input.botSpokeRecently) return { speak: false, score: 0, reason: '刚说过话，冷却中' };
 
@@ -87,7 +88,7 @@ export function groupShouldSpeak(input: {
   if (/\?|？|吗|怎么|为什么|求助|有没有/.test(input.text)) score += 2;
   if (input.text.length >= 8 && input.text.length <= 200) score += 1;
   if (input.messagesLastHour >= 3) score += 1;
-  const threshold = Number(input.settings.groupAttentionThreshold ?? 4);
+  const threshold = Number(input.settings.groupAttentionThreshold ?? 3);
   const probability = Number(input.settings.groupReplyProbability ?? (input.mode === 'active' ? 0.35 : 0.12));
   if (score < threshold) return { speak: false, score, reason: '注意力分数不足' };
   const speak = Math.random() < probability;

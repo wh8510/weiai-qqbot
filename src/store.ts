@@ -864,7 +864,10 @@ export class Store {
     );
   }
 
-  updateRelationship(sessionId: string, patch: { affinity?: number; trust?: number; mood?: string; energy?: number }): void {
+  updateRelationship(
+    sessionId: string,
+    patch: { affinity?: number; trust?: number; mood?: string; energy?: number; lastInteractionAt?: number },
+  ): void {
     const current = this.getRelationship(sessionId);
     this.db
       .prepare(
@@ -880,7 +883,7 @@ export class Store {
         patch.trust ?? current.trust,
         patch.mood ?? current.mood,
         patch.energy ?? current.energy,
-        now(),
+        patch.lastInteractionAt ?? current.last_interaction_at ?? now(),
         now(),
       );
   }

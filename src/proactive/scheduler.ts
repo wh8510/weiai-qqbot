@@ -54,6 +54,15 @@ export class ProactiveScheduler {
         if (this.store.countPendingOutbox(session.id) > 0) continue;
         const settings = this.sessionSettings(session);
         if (settings.paused === true) continue;
+        if (
+          isQuietHours(
+            this.config.timezone,
+            String(settings.quietStart ?? this.store.getSetting('proactive.quiet_start', '23:30')),
+            String(settings.quietEnd ?? this.store.getSetting('proactive.quiet_end', '08:00')),
+          )
+        ) {
+          continue;
+        }
 
         const lastIn = this.store.lastIncomingAt(session.id) ?? 0;
 

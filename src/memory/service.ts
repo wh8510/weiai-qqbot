@@ -40,6 +40,7 @@ export async function summarizeSession(store: Store, sessionId: string, timezone
   const previous = store.getSessionSummary(sessionId);
   const facts = store.listFacts(sessionId, 30);
   const openLoops = store.listOpenLoops(sessionId, 'open', 10);
+  const existingLoopTopics = new Set(openLoops.map((l) => l.topic));
 
   const prompt = [
     '你在为一段 QQ 聊天做长期记忆整理。只输出 JSON，不要 Markdown。',
@@ -108,9 +109,12 @@ export async function summarizeSession(store: Store, sessionId: string, timezone
     if (Array.isArray(data.open_loops)) {
       for (const loop of data.open_loops.slice(0, 5)) {
         if (!loop?.topic) continue;
+        const topic = String(loop.topic).slice(0, 80);
+        if (existingLoopTopics.has(topic)) continue;
+        existingLoopTopics.add(topic);
         store.upsertOpenLoop({
           sessionId,
-          topic: String(loop.topic).slice(0, 80),
+          topic,
           detail: String(loop.detail ?? '').slice(0, 300),
           sourceMessageId: messages[messages.length - 1]?.message_id ?? undefined,
         });

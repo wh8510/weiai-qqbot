@@ -8,7 +8,7 @@
 | 项目 | 命令 / 方式 | 结果 |
 |---|---|---|
 | TypeScript | `pnpm typecheck` | 通过 |
-| 单元 / 集成测试 | `pnpm test` | 8 个文件，37 个用例全部通过 |
+| 单元 / 集成测试 | `pnpm test` | 10 个文件，46 个用例全部通过（含 API 鉴权/CSRF/密钥脱敏、主动消息、群注意力） |
 | 服务端构建 | `pnpm build:server` | 通过（`dist/server/index.js` + `cli.js`） |
 | 前端构建 | `pnpm build:web` | 通过（`dist/web`） |
 | 管理端 UI | Playwright + 系统 Chrome | 登录、改密、11 个页面、调试台真实回复，全部通过 |
