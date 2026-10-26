@@ -17,7 +17,7 @@
     "build:web": "vite build",
     "start": "node dist/server/index.js",
     "cli": "node dist/server/cli.js",
-    "demo": "cross-env DEMO_MODE=1 BOT_PORT=18080 BOT_DATA_DIR=data-demo tsx src/index.ts",
+    "demo": "cross-env DEMO_MODE=1 BOT_PORT=18080 BOT_DATA_DIR=data-demo ONEBOT_MODE=reverse tsx src/index.ts",
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit"

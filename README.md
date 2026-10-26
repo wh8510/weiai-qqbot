@@ -170,10 +170,19 @@ pnpm cli backup      # 数据库备份
 
 ---
 
+## 数据目录
+
+`pnpm start`、`scripts/start.bat` 和管理端使用**同一个数据目录**，由 `.env` 的 `BOT_DATA_DIR` 决定，默认是项目下的 `data/`。
+
+- 会话、消息、记忆、密钥都在 `data/companion.db`
+- 主密钥在 `data/master.key`（必须备份）
+- 不要用不同的 `BOT_DATA_DIR` 启动同一个机器人，否则会看到“空库 / 没有历史”
+- 同一个 8080 端口只能跑一个实例；重复 `pnpm start` 会端口冲突
+
 ## 安全与隐私
 
 - 消息正文、发送者名、摘要、事实、日记、未闭环、outbox、jobs、API Key 字段级加密；管理员密码 Argon2id。
-- API Key **只写不读**：管理端只显示是否已配置，不返回明文。
+- API Key **默认不回显**：Provider 卡片显示尾号/长度；需要核对时手动点「显示」，操作写审计日志。
 - 登录 Cookie + CSRF + 登录限速 + 审计日志。
 - 图片下载做 SSRF 校验；模型默认没有工具权限；不执行聊天里的指令。
 - 无遥测；日志默认不记录消息正文；Demo 模式不联网。
@@ -185,7 +194,7 @@ pnpm cli backup      # 数据库备份
 
 ## 已知限制
 
-- 真实 NapCat 联调尚未进行；协议层按 OneBot 11 标准实现，拿到 URL/token 后需要做一次连通性验证。
+- 真实 NapCat 联调按你的部署环境进行；当前程序支持正向/反向 WS，但 NapCat 容器/端口离线时会显示 `ECONNREFUSED` 并自动重连。
 - 数据库整库加密（SQLCipher）在当前 Windows/Node 24 环境下没有稳定预编译包，因此默认采用**字段级加密**；Linux 可用磁盘加密补齐。
 - 语音仅 Windows SAPI 可用；Linux 暂不启用本地 TTS。
 - 语音转写（ASR）、视频、AI 生图、插件市场、多账号 UI 不在 v1 范围。
