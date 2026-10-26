@@ -81,6 +81,20 @@ describe('admin API auth and sanitization', () => {
     expect(res.json().providers[0].hasKey).toBe(true);
   });
 
+  it('reveals a key only through an explicit CSRF-protected request', async () => {
+    const denied = await app.inject({ method: 'POST', url: '/api/providers/p/reveal-key', headers: { cookie }, payload: {} });
+    expect(denied.statusCode).toBe(403);
+    const res = await app.inject({
+      method: 'POST',
+      url: '/api/providers/p/reveal-key',
+      headers: { cookie, 'x-csrf-token': csrf },
+      payload: {},
+    });
+    expect(res.statusCode).toBe(200);
+    expect(res.json().apiKey).toBe('sk-super-secret');
+    expect(res.json().keyLast4).toBe('cret');
+  });
+
   it('rejects group_member allow entries', async () => {
     const res = await app.inject({
       method: 'POST',

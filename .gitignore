@@ -9,6 +9,8 @@ config.yaml
 Thumbs.db
 coverage/
 artifacts/
+.idea/
+.vscode/
 *.db
 *.db-wal
 *.db-shm

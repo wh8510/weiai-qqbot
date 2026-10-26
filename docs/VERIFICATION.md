@@ -8,7 +8,7 @@
 | 项目 | 命令 / 方式 | 结果 |
 |---|---|---|
 | TypeScript | `pnpm typecheck` | 通过 |
-| 单元 / 集成测试 | `pnpm test` | 10 个文件，46 个用例全部通过（含 API 鉴权/CSRF/密钥脱敏、主动消息、群注意力） |
+| 单元 / 集成测试 | `pnpm test` | 10 个文件，47 个用例全部通过（含 API 鉴权/CSRF/Key 显示、主动消息、群注意力） |
 | 服务端构建 | `pnpm build:server` | 通过（`dist/server/index.js` + `cli.js`） |
 | 前端构建 | `pnpm build:web` | 通过（`dist/web`） |
 | 管理端 UI | Playwright + 系统 Chrome | 登录、改密、11 个页面、调试台真实回复，全部通过 |
@@ -18,6 +18,7 @@
 | 真实 DeepSeek 探测 | `deepseek:deepseek-flash` | 文本 / JSON / 视觉（A7 测试图）全部通过 |
 | 真实 DeepSeek 对话 | 管理端调试台 | 返回中文 2 条气泡，成本记账 `¥0.00066`，无空回复 |
 | Key 规范化 | 修复 `空格 + 额外后缀` | 保存时取第一个空白前 token；管理端显示 Key 尾号，避免再次误存 |
+| Key 查看 / 模型选择 | 浏览器自动化 | 配置弹窗显示尾号/长度并可「显示」完整 Key；DeepSeek 下拉包含 Flash/Pro，Pro 的「设为看图」禁用；UI 切换并恢复角色成功 |
 | Windows TTS | `synthesizeSilk('你好，今天怎么样')` | SAPI 生成 WAV，`silk-wasm` 编码成功（179 KB） |
 | 首次生产启动 | 无 `.env` / 无数据目录 | 自动生成主密钥、管理员、初始密码文件；`/api/health` 正常 |
 | CLI | `doctor` / `backup` / `key-fingerprint` | 通过 |

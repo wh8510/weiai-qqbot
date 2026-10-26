@@ -286,6 +286,13 @@ tr:hover td { background: rgba(255, 255, 255, 0.015); }
 .provider-name { font-weight: 700; }
 .provider-meta { color: var(--faint); font-size: 11px; }
 .provider-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+.model-pick {
+  display: flex; flex-direction: column; gap: 8px;
+  padding: 10px; border: 1px solid var(--border-soft); border-radius: 10px;
+  background: rgba(8, 14, 21, 0.45);
+}
+.model-pick .select { font-size: 12px; }
+.row.nowrap { flex-wrap: nowrap; }
 
 .role-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
 .role-card { border: 1px solid var(--border); border-radius: 11px; padding: 13px; background: rgba(10, 15, 22, 0.35); display: flex; flex-direction: column; gap: 7px; }

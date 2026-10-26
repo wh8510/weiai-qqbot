@@ -293,6 +293,16 @@ export async function createWebServer(deps: WebDeps): Promise<any> {
     return { ok: true };
   });
 
+  app.post('/api/providers/:id/reveal-key', async (req, reply) => {
+    const id = String((req.params as any).id);
+    const provider = store.getProvider(id);
+    if (!provider) return reply.code(404).send({ error: 'NOT_FOUND', message: 'Provider 不存在' });
+    const key = store.getProviderApiKey(id);
+    if (!key) return reply.code(404).send({ error: 'NO_KEY', message: '这个 Provider 还没有配置 Key' });
+    store.audit((req as any).auth.username, 'provider.reveal_key', id, req.ip);
+    return { apiKey: key, keyLast4: key.slice(-4), keyLength: key.length };
+  });
+
   app.delete('/api/providers/:id', async (req, reply) => {
     const id = String((req.params as any).id);
     const provider = store.getProvider(id);
