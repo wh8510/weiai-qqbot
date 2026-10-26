@@ -1,0 +1,10 @@
+# For the optional caddy service in docker-compose.yml.
+# Replace bot.example.com with your domain, uncomment the caddy service,
+# then: docker compose up -d --build
+#
+# Inside the Compose network the bot is reachable as "bot".
+
+bot.example.com {
+	encode zstd gzip
+	reverse_proxy bot:8080
+}

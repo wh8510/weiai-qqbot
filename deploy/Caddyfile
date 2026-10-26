@@ -1,9 +1,9 @@
-# Replace bot.example.com with your domain, then run:
-#   caddy run --config deploy/Caddyfile
-# or use the commented caddy service in docker-compose.yml.
+# Host-installed Caddy example.
+# Install Caddy on the host, put your domain here, then:
+#   sudo caddy run --config /etc/caddy/Caddyfile
 #
-# Caddy handles HTTPS and WebSocket upgrades automatically.
-# Keep the bot bound to 127.0.0.1:8080.
+# The bot only listens on 127.0.0.1:8080 (see docker-compose.yml), so Caddy
+# on the host can reach it while the port stays closed to the internet.
 
 bot.example.com {
 	encode zstd gzip
