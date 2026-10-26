@@ -9,6 +9,7 @@ config.yaml
 Thumbs.db
 coverage/
 artifacts/
+release/
 .idea/
 .vscode/
 *.db
